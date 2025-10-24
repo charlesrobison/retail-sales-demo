@@ -34,3 +34,4 @@ prod.duckdb
 
 # Data Files
 data/
+duckdb.*
