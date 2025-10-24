@@ -21,3 +21,15 @@ models:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
+
+  - name: agg_customer_sales_summary
+    description: "Aggregated customer and sales metrics for BI and dashboards."
+    columns:
+      - name: gender
+        description: "Customer gender category."
+      - name: age_group
+        description: "Customer age group."
+      - name: total_net_sales
+        tests:
+          - not_null
+
