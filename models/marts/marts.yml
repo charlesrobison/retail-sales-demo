@@ -9,14 +9,6 @@ models:
           - unique
           - not_null
 
-  - name: dim_products
-    description: "Unique product categories"
-    columns:
-      - name: product_category
-        tests:
-          - unique
-          - not_null
-
   - name: fct_sales
     description: "Fact table of all sales transactions"
     columns:
