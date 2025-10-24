@@ -1,22 +1,22 @@
 {{ config(materialized='view') }}
 
-with final AS (
+with final as (
 
-SELECT
-    CID AS customer_id,
-    TID AS transaction_id,
-    Gender AS gender,
-    "Age Group" AS age_group,
-    "Purchase Date" AS purchase_date,
-    "Product Category" AS product_category,
-    "Discount Availed" AS discount_availed,
-    "Discount Name" AS discount_name,
-    "Discount Amount (INR)" AS discount_amount_inr,
-    "Gross Amount" AS gross_amount,
-    "Net Amount" AS net_amount,
-    "Purchase Method" AS purchase_method,
-    Location AS location
-FROM retail_sales
-)
+    select
+        CID as customer_id,
+        TID as transaction_id,
+        Gender as gender,
+        "Age Group" as age_group,
+        "Purchase Date" as purchase_date,
+        "Product Category" as product_category,
+        "Discount Availed" as discount_availed,
+        "Discount Name" as discount_name,
+        "Discount Amount (INR)" as discount_amount_inr,
+        "Gross Amount" as gross_amount,
+        "Net Amount" as net_amount,
+        "Purchase Method" as purchase_method,
+        Location as location
+    from retail_sales
+    )
 
-SELECT * FROM final
+select * from final

@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Unique customers and their demographics"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    description: "Unique product categories"
+    columns:
+      - name: product_category
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_sales
+    description: "Fact table of all sales transactions"
+    columns:
+      - name: transaction_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
