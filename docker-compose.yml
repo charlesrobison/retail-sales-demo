@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: redash_pass
+      POSTGRES_USER: postgres
+      POSTGRES_DB: redash
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+
+  server:
+    image: redash/redash:8.0.0.b32245
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "5000:5000"
+    environment:
+      REDASH_DATABASE_URL: "postgresql://postgres:redash_pass@postgres/redash"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_COOKIE_SECRET: "supersecret"
+      REDASH_SECRET_KEY: "supersecret"
+    volumes:
+      - ./exports:/app/exports
+
+  worker:
+    image: redash/redash:8.0.0.b32245
+    command: worker
+    depends_on:
+      - server
+      - postgres
+      - redis
+    environment:
+      REDASH_DATABASE_URL: "postgresql://postgres:redash_pass@postgres/redash"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_COOKIE_SECRET: "supersecret"
+      REDASH_SECRET_KEY: "supersecret"
+
+  scheduler:
+    image: redash/redash:8.0.0.b32245
+    command: scheduler
+    depends_on:
+      - server
+      - postgres
+      - redis
+    environment:
+      REDASH_DATABASE_URL: "postgresql://postgres:redash_pass@postgres/redash"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_COOKIE_SECRET: "supersecret"
+      REDASH_SECRET_KEY: "supersecret"
+
+volumes:
+  postgres_data:
