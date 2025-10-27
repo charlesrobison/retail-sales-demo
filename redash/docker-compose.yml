@@ -1,3 +1,5 @@
+version: "3.7"
+
 services:
   postgres:
     image: postgres:13
@@ -16,7 +18,7 @@ services:
       - "6379:6379"
 
   server:
-    image: redash/redash:10.1.0.buster
+    image: redash/redash:8.0.0.b32245
     depends_on:
       - postgres
       - redis
@@ -31,12 +33,12 @@ services:
       - ./exports:/app/exports
 
   worker:
-    image: redash/redash:10.1.0.buster
+    image: redash/redash:8.0.0.b32245
+    command: worker
     depends_on:
       - server
       - postgres
       - redis
-    command: worker
     environment:
       REDASH_DATABASE_URL: "postgresql://postgres:redash_pass@postgres/redash"
       REDASH_REDIS_URL: "redis://redis:6379/0"
@@ -45,18 +47,22 @@ services:
     volumes:
       - ./exports:/app/exports
 
+
   scheduler:
-    image: redash/redash:10.1.0.buster
+    image: redash/redash:8.0.0.b32245
+    command: scheduler
     depends_on:
       - server
       - postgres
       - redis
-    command: scheduler
     environment:
       REDASH_DATABASE_URL: "postgresql://postgres:redash_pass@postgres/redash"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_COOKIE_SECRET: "supersecret"
       REDASH_SECRET_KEY: "supersecret"
+    volumes:
+      - ./exports:/app/exports
+
 
 volumes:
   postgres_data:
